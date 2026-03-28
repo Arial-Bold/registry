@@ -1,0 +1,80 @@
+name: Validate Registry PR
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "registry/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 25
+
+      - run: npm ci
+
+      - name: Validate manifests
+        id: validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: |
+          OUTPUT=$(npm run validate 2>&1) && PASSED=true || PASSED=false
+          echo "$OUTPUT"
+          echo "output<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$OUTPUT" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          if [ "$PASSED" = false ]; then exit 1; fi
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull indexer image
+        run: docker pull ghcr.io/dolphindepot/indexer:latest
+
+      - name: Find changed manifests
+        id: changed
+        run: |
+          MANIFESTS=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD -- 'registry/**/manifest.json')
+          echo "manifests<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$MANIFESTS" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Test manifests
+        if: steps.changed.outputs.manifests != ''
+        id: test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./.github/scripts/test-manifests.sh "${{ steps.changed.outputs.manifests }}" "${{ github.workspace }}" "$GITHUB_OUTPUT"
+
+      - name: Comment on PR
+        if: steps.test.outputs.comment != ''
+        uses: actions/github-script@v8
+        env:
+          COMMENT_BODY: ${{ steps.test.outputs.comment }}
+          VALIDATE_OUTPUT: ${{ steps.validate.outputs.output }}
+        with:
+          script: |
+            const script = require('./.github/scripts/comment-pr.js');
+            await script({ github, context });
+
+      - name: Fail if any manifest test failed
+        if: steps.test.outputs.failed == '1'
+        run: exit 1
