@@ -12,13 +12,13 @@
   <a href="https://github.com/DolphinDepot/registry/pulls">Submit Your App</a>
 </p>
 
-## How It Works
+## About
 
-1. You open a PR adding `registry/<your-app-slug>/source.yaml` and `registry/<your-app-slug>/manifest.json`
-2. CI validates your submission automatically
-3. A maintainer reviews and merges
+**Dolphin Depot** is a homebrew app store for Nintendo GameCube. It allows users to browse, download, and install homebrew applications directly on their console.
 
-Once merged, the Indexer picks up your app on the next scan cycle.
+This repository serves as the public registry of all applications available through Dolphin Depot. Each entry contains a manifest file that describes the application, where to download it from, and how to package it for distribution. The Dolphin Depot indexer periodically scans this registry, processes new releases, and makes them available to end users.
+
+Anyone can submit their homebrew application by opening a pull request.
 
 ## Submitting Your App
 
@@ -34,12 +34,12 @@ Your app slug is the directory name under `registry/`. It must:
 
 Each entry is required to provide Manifest file in `registry/<slug>/`:
 
-**`manifest.json`** describes your application. The full JSON Schema is available at `scripts/schemas/manifest.schema.json`.
+**`manifest.json`** describes your application. The full JSON Schema is available at `manifest.schema.json`.
 
 Additionallu you can provide images:
-- **banner.png** 96x32px image displayed as app icon
-- **screenshot{0-2}.png** up to 3 640x480px screenshots
-- **hero.png** 640x160px background image displayed in app details
+- **`banner.png`** 96x32px image displayed as app icon
+- **`screenshot{0-2}.png`** up to 3 640x480px screenshots
+- **`hero.png`** 640x160px background image displayed in app details
 
 ### 3. Open a pull request
 
