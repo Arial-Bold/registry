@@ -1,0 +1,32 @@
+{
+  "name": "Dolphin Depot",
+  "author": "Dolphin Depot Team",
+  "description_short": "Stocking the best GameCube homebrew",
+  "description_long": "Stocking the best GameCube homebrew. Discover and download homebrew games, emulators, and utilities - directly on real hardware. Visit https://dolphindepot.org for more information.",
+  "category": "utilities",
+  "platforms": ["gamecube", "panasonic_q"],
+  "peripherals": [
+    "controller", 
+    "sd_gecko", 
+    "sd2sp2", 
+    "gcloader", 
+    "flippydrive", 
+    "bba",
+    "eth2gc"
+  ],
+  "source": {
+    "type": "github_release",
+    "repository": "DolphinDepot/client",
+    "asset_pattern": "dolphindepot-*.zip"
+  },
+  "treatments": [
+    {
+      "treatment": "archive.extract",
+      "arguments": ["dolphindepot-*.zip", "dolphindepot/"]
+    },
+    {
+      "treatment": "contents.move",
+      "arguments": ["dolphindepot/*", "./"]
+    }
+  ]
+}
