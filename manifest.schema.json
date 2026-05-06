@@ -3,7 +3,47 @@
   "$id": "https://dolphindepot.org/schemas/manifest.schema.json",
   "title": "Dolphin Depot Application Manifest Schema",
   "type": "object",
+  "$defs": {
+    "ignore_versions": {
+      "title": "ignore_versions[]",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Release tag names (or picomatch glob patterns) to skip when resolving the latest version.",
+      "examples": [["v1.0-beta", "nightly*"]]
+    }
+  },
   "required": ["name", "author", "description_short", "category", "source", "treatments"],
+  "examples": [
+    {
+      "name": "CleanRip",
+      "author": "emu_kidid",
+      "description_short": "Disc Backup Tool for GC/Wii Discs",
+      "description_long": "A tool to backup your GameCube/Wii discs via IOS58. Creates 1:1 backups for archival purposes without any requirements for custom IOS (cIOS). Supports USB 2.0, NTFS, exFAT and Front SD.",
+      "category": "utilities",
+      "platforms": ["gamecube", "panasonic_q"],
+      "peripherals": ["controller", "sd_gecko", "sd2sp2", "m2loader", "mmce"],
+      "source": {
+        "type": "github_release",
+        "repository": "emukidid/cleanrip",
+        "asset_pattern": "CleanRip-*-gc.zip"
+      },
+      "treatments": [
+        {
+          "treatment": "archive.extract",
+          "arguments": ["CleanRip-*-gc.zip", "."]
+        },
+        {
+          "treatment": "contents.move",
+          "arguments": ["cleanrip-gc.dol", "apps/cleanrip/default.dol"]
+        },
+        {
+          "treatment": "registry.copy",
+          "arguments": ["opening.bnr", "apps/cleanrip/opening.bnr"]
+        }
+      ]
+    }
+  ],
   "properties": {
     "name": {
       "type": "string",
@@ -40,7 +80,7 @@
       "description": "List of compatible hardware platforms. If omitted, no platform compatibility is specified.",
       "items": {
         "type": "string",
-        "enum": ["gamecube", "panasonic_q", "triforce", "tdev", "gdev", "wii_nintendont", "wii_swiss", "dolphin"]
+        "enum": ["gamecube", "panasonic_q", "triforce", "tdev", "gdev", "npdp_reader", "nr_reader", "wii_nintendont", "wii_swiss", "dolphin"]
       },
       "examples": [
         ["gamecube", "panasonic_q"],
@@ -55,52 +95,154 @@
         "enum": [
           "controller", "keyboard",
           "gb_player", "gba_link_cable",
-          "microphone", "memory_card", "dance_mat", "dk_bongos", "racing_wheel",
-          "sd_gecko", "sd2sp2", "m2_loader", "mmce",
+          "microphone", "memory_card", "disc", "action_pad", "dk_bongos", "steering_wheel",
+          "sd_gecko", "sd2sp2", "m2loader", "mmce",
           "bba", "modem", "eth2gc",
           "gcloader", "cubeode", "flippydrive", "picoboot", "usb_gecko"
         ]
       },
       "examples": [
         ["controller", "sd_gecko", "bba"],
-        ["controller", "sd_gecko", "sd2sp2", "m2_loader", "mmce"]
+        ["controller", "sd_gecko", "sd2sp2", "m2loader", "mmce"]
       ]
     },
     "source": {
       "type": "object",
-      "description": "Defines where to download the application binary. Supports GitHub releases, GitLab releases, or a direct URL.",
+      "description": "Defines where to download the application binary. Exactly one variant must be configured, identified by the `type` discriminator.",
       "oneOf": [
         {
-          "description": "Download from a GitHub release asset.",
+          "title": "GitHub release",
+          "description": "Download an asset from a GitHub release.",
+          "type": "object",
           "properties": {
-            "type": { "const": "github_release" },
+            "type": {
+              "const": "github_release",
+              "description": "Discriminator identifying this source as a GitHub release."
+            },
             "repository": {
               "type": "string",
               "pattern": "^[^/]+/[^/]+$",
-              "description": "GitHub repository in owner/repo format.",
-              "examples": ["emukidid/swiss-gc", "emukidid/cleanrip"]
+              "description": "GitHub repository in `owner/repo` format. Nested groups are not supported.",
+              "examples": ["emukidid/swiss-gc"]
             },
             "asset_pattern": {
               "type": "string",
               "minLength": 1,
-              "description": "Glob pattern to match the desired release asset filename.",
-              "examples": ["swiss_r*.7z", "CleanRip-*-gc.zip", "gchttpserver-*.dol"]
+              "description": "Picomatch glob pattern matched against release asset filenames. Selects the asset to download.",
+              "examples": ["swiss_r*.7z", "CleanRip-*-gc.zip"]
             },
-            "ignore_versions": {
-              "type": "array",
-              "items": { "type": "string", "minLength": 1 },
-              "uniqueItems": true,
-              "description": "List of release tag names to skip when resolving the latest version.",
-              "examples": [["v1.0-beta", "nightly"]]
-            }
+            "ignore_versions": { "$ref": "#/$defs/ignore_versions" }
           },
           "required": ["type", "repository", "asset_pattern"],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "examples": [
+            {
+              "type": "github_release",
+              "repository": "emukidid/swiss-gc",
+              "asset_pattern": "swiss_r*.7z"
+            },
+            {
+              "type": "github_release",
+              "repository": "emukidid/swiss-gc",
+              "asset_pattern": "swiss_r*.7z",
+              "ignore_versions": ["v1.0-beta", "nightly*"]
+            }
+          ]
         },
         {
-          "description": "Download from a direct URL. Used when the application is not hosted on a Git forge.",
+          "title": "GitLab release",
+          "description": "Download an asset from a GitLab release.",
+          "type": "object",
           "properties": {
-            "type": { "const": "direct_url" },
+            "type": {
+              "const": "gitlab_release",
+              "description": "Discriminator identifying this source as a GitLab release."
+            },
+            "repository": {
+              "type": "string",
+              "pattern": "^[^/]+/[^/]+$",
+              "description": "GitLab project path in `owner/repo` format. Subgroups are not supported.",
+              "examples": ["group/project"]
+            },
+            "asset_pattern": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Picomatch glob pattern matched against release asset filenames.",
+              "examples": ["build-*.tar.gz"]
+            },
+            "ignore_versions": { "$ref": "#/$defs/ignore_versions" }
+          },
+          "required": ["type", "repository", "asset_pattern"],
+          "additionalProperties": false,
+          "examples": [
+            {
+              "type": "gitlab_release",
+              "repository": "group/project",
+              "asset_pattern": "build-*.tar.gz"
+            },
+            {
+              "type": "gitlab_release",
+              "repository": "group/project",
+              "asset_pattern": "build-*.tar.gz",
+              "ignore_versions": ["v1.0-beta", "nightly*"]
+            }
+          ]
+        },
+        {
+          "title": "itch.io",
+          "description": "Download an upload from an itch.io game page.",
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "itchio",
+              "description": "Discriminator identifying this source as an itch.io upload."
+            },
+            "creator": {
+              "type": "string",
+              "minLength": 1,
+              "description": "itch.io username of the creator. Forms part of the URL: `https://[creator].itch.io/[game]`.",
+              "examples": ["artemiourbina"]
+            },
+            "game": {
+              "type": "string",
+              "minLength": 1,
+              "description": "itch.io game/project slug. Forms part of the URL: `https://[creator].itch.io/[game]`.",
+              "examples": ["240p-test-suite"]
+            },
+            "upload": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Picomatch glob pattern matched against an upload's display name or filename on the itch.io download page. The first matching upload is selected.",
+              "examples": ["240p Test Suite for Wii*"]
+            },
+            "format": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Expected file extension of the downloaded asset. Used to assemble the local filename `{game}.{format}`.",
+              "examples": ["zip", "7z"]
+            }
+          },
+          "required": ["type", "creator", "game", "upload", "format"],
+          "additionalProperties": false,
+          "examples": [
+            {
+              "type": "itchio",
+              "creator": "artemiourbina",
+              "game": "240p-test-suite",
+              "upload": "240p Test Suite for Wii*",
+              "format": "zip"
+            }
+          ]
+        },
+        {
+          "title": "Direct URL",
+          "description": "Download from a direct URL. Used when the application is not hosted on a Git forge or itch.io.",
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "direct_url",
+              "description": "Discriminator identifying this source as a direct URL download."
+            },
             "url": {
               "type": "string",
               "format": "uri",
@@ -115,93 +257,215 @@
             }
           },
           "required": ["type", "url"],
-          "additionalProperties": false
-        },
-        {
-          "description": "Download from a GitLab release asset.",
-          "properties": {
-            "type": { "const": "gitlab_release" },
-            "repository": {
-              "type": "string",
-              "pattern": "^[^/]+/[^/]+$",
-              "description": "GitLab repository in owner/repo format.",
-              "examples": ["group/project"]
-            },
-            "asset_pattern": {
-              "type": "string",
-              "minLength": 1,
-              "description": "Glob pattern to match the desired release asset filename.",
-              "examples": ["build-*.tar.gz"]
-            },
-            "ignore_versions": {
-              "type": "array",
-              "items": { "type": "string", "minLength": 1 },
-              "uniqueItems": true,
-              "description": "List of release tag names to skip when resolving the latest version.",
-              "examples": [["v1.0-beta", "nightly"]]
+          "additionalProperties": false,
+          "examples": [
+            {
+              "type": "direct_url",
+              "url": "https://example.com/app.zip"
             }
-          },
-          "required": ["type", "repository", "asset_pattern"],
-          "additionalProperties": false
-        },
-        {
-          "description": "Download from itch.io. Used for applications and games hosted on the itch.io platform.",
-          "properties": {
-            "type": { "const": "itchio" },
-            "creator": {
-              "type": "string",
-              "minLength": 1,
-              "description": "itch.io username of the creator. Appears in the URL as https://[creator].itch.io/[game].",
-              "examples": ["artemiourbina"]
-            },
-            "game": {
-              "type": "string",
-              "minLength": 1,
-              "description": "itch.io game/project slug. Appears in the URL as https://[creator].itch.io/[game].",
-              "examples": ["240p-test-suite"]
-            },
-            "upload": {
-              "type": "string",
-              "minLength": 1,
-              "description": "Display name of the upload to download, as shown on the itch.io download page.",
-              "examples": ["240p Test Suite for Wii 1.19"]
-            },
-            "format": {
-              "type": "string",
-              "minLength": 1,
-              "description": "Expected file format of the download.",
-              "examples": ["zip"]
-            }
-          },
-          "required": ["type", "creator", "game", "upload", "format"],
-          "additionalProperties": false
+          ]
         }
       ]
     },
     "treatments": {
       "type": "array",
-      "description": "Ordered list of post-download processing steps applied to the downloaded asset. Treatments are executed sequentially.",
+      "description": "Ordered list of post-download processing steps applied to the downloaded asset. Treatments are executed sequentially. Each entry is identified by its `treatment` discriminator, which determines the operation and the shape of `arguments`.",
       "items": {
-        "type": "object",
-        "required": ["treatment", "arguments"],
-        "additionalProperties": false,
-        "properties": {
-          "treatment": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Name of the treatment operation to apply. Common treatments: archive.extract (extract an archive), contents.move (move/rename files), registry.copy (copy files from app registry directory).",
-            "examples": ["archive.extract", "contents.move", "registry.copy"]
-          },
-          "arguments": {
-            "type": "array",
-            "items": { "type": "string" },
-            "description": "Arguments passed to the treatment. The meaning depends on the treatment type. For archive.extract: [source_pattern, destination]. For contents.move: [source_pattern, destination]. For registry.copy: [source_pattern, destination].",
+        "oneOf": [
+          {
+            "title": "Extract Archive",
+            "description": "Extracts a downloaded archive (ZIP, 7z, TAR, etc.) into the working directory. Uses 7-Zip under the hood.",
+            "type": "object",
+            "properties": {
+              "treatment": {
+                "const": "archive.extract",
+                "description": "Discriminator identifying this step as an archive extraction."
+              },
+              "arguments": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Archive pattern",
+                    "description": "Glob pattern matching the archive file(s) to extract.",
+                    "examples": ["swiss_r*.7z"]
+                  },
+                  {
+                    "type": "string",
+                    "title": "Destination",
+                    "description": "Directory to extract into, relative to the working directory. Defaults to the working directory itself.",
+                    "examples": [".", "extracted"]
+                  }
+                ]
+              }
+            },
+            "required": ["treatment", "arguments"],
+            "additionalProperties": false,
             "examples": [
-              ["swiss_r*.7z", "."],
-              ["cleanrip-gc.dol", "apps/cleanrip/default.dol"]
+              {
+                "treatment": "archive.extract",
+                "arguments": ["swiss_r*.7z", "."]
+              }
+            ]
+          },
+          {
+            "title": "Move Contents",
+            "description": "Moves files from the working directory to the output directory. Use this to select which files end up in the final package and where.",
+            "type": "object",
+            "properties": {
+              "treatment": {
+                "const": "contents.move",
+                "description": "Discriminator identifying this step as a contents move."
+              },
+              "arguments": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Source pattern",
+                    "description": "Glob pattern matching files in the working directory to move. If the pattern ends with `/`, all contents of that directory are moved.",
+                    "examples": ["cleanrip-gc.dol", "build/"]
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Destination",
+                    "description": "Target path in the output directory. End with `/` to treat as a directory. Parent directories are created automatically.",
+                    "examples": ["apps/cleanrip/default.dol", "apps/cleanrip/"]
+                  }
+                ]
+              }
+            },
+            "required": ["treatment", "arguments"],
+            "additionalProperties": false,
+            "examples": [
+              {
+                "treatment": "contents.move",
+                "arguments": ["cleanrip-gc.dol", "apps/cleanrip/default.dol"]
+              }
+            ]
+          },
+          {
+            "title": "Delete Contents",
+            "description": "Deletes files matching a pattern from the working directory. Useful for cleaning up unwanted files before further processing.",
+            "type": "object",
+            "properties": {
+              "treatment": {
+                "const": "contents.delete",
+                "description": "Discriminator identifying this step as a contents delete."
+              },
+              "arguments": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Pattern",
+                    "description": "Glob pattern matching files to delete. Deletes recursively.",
+                    "examples": ["*.txt", "docs/"]
+                  }
+                ]
+              }
+            },
+            "required": ["treatment", "arguments"],
+            "additionalProperties": false,
+            "examples": [
+              {
+                "treatment": "contents.delete",
+                "arguments": ["*.txt"]
+              }
+            ]
+          },
+          {
+            "title": "Copy from Registry",
+            "description": "Copies files from the app's registry entry directory into the output. Use this to include static assets like icons or banners that are stored in the registry.",
+            "type": "object",
+            "properties": {
+              "treatment": {
+                "const": "registry.copy",
+                "description": "Discriminator identifying this step as a registry copy."
+              },
+              "arguments": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Source pattern",
+                    "description": "Glob pattern matching files in the registry entry directory.",
+                    "examples": ["opening.bnr"]
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Destination",
+                    "description": "Target path in the output directory. End with `/` to treat as a directory.",
+                    "examples": ["opening.bnr"]
+                  }
+                ]
+              }
+            },
+            "required": ["treatment", "arguments"],
+            "additionalProperties": false,
+            "examples": [
+              {
+                "treatment": "registry.copy",
+                "arguments": ["opening.bnr", "opening.bnr"]
+              }
+            ]
+          },
+          {
+            "title": "Download from URL",
+            "description": "Downloads a file from a URL into the working directory. Use this to fetch additional assets not included in the main source download.",
+            "type": "object",
+            "properties": {
+              "treatment": {
+                "const": "web.download",
+                "description": "Discriminator identifying this step as a URL download."
+              },
+              "arguments": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "format": "uri",
+                    "title": "URL",
+                    "description": "Direct download URL of the file.",
+                    "examples": ["https://example.com/asset.bin"]
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Destination",
+                    "description": "File path in the working directory to save the download to.",
+                    "examples": ["extra/asset.bin"]
+                  }
+                ]
+              }
+            },
+            "required": ["treatment", "arguments"],
+            "additionalProperties": false,
+            "examples": [
+              {
+                "treatment": "web.download",
+                "arguments": ["https://example.com/asset.bin", "extra/asset.bin"]
+              }
             ]
           }
-        }
+        ]
       }
     }
   },
