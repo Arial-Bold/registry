@@ -12,6 +12,10 @@
     "bba",
     "eth2gc"
   ],
+  "license": {
+    "spdx": "BSD-3-Clause",
+    "url": "https://github.com/UnknownShadow200/ClassiCube/blob/master/license.txt"
+  },
   "source": {
     "type": "direct_url",
     "url": "https://cdn.classicube.net/client/latest/ClassiCube-gc.dol"

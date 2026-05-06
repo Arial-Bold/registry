@@ -14,6 +14,10 @@
     "bba",
     "eth2gc"
   ],
+  "license": {
+    "spdx": "GPL-3.0-or-later",
+    "url": "https://github.com/DolphinDepot/client/blob/main/LICENSE"
+  },
   "source": {
     "type": "github_release",
     "repository": "DolphinDepot/client",

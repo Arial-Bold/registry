@@ -10,6 +10,10 @@
   "peripherals": [
     "controller"
   ],
+  "license": {
+    "spdx": "Zlib",
+    "url": "https://github.com/corenting/GC-Controller-Test/blob/master/LICENSE.md"
+  },
   "source": {
     "type": "github_release",
     "repository": "corenting/GC-Controller-Test",

@@ -6,6 +6,10 @@
   "category": "media",
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "sd_gecko", "sd2sp2", "cubeode", "gcloader"],
+  "license": {
+    "spdx": "GPL-2.0-or-later",
+    "notes": "Inherited from upstream MPlayer (GPL-2.0-or-later); this fork ships no top-level LICENSE file."
+  },
   "source": {
     "type": "github_release",
     "repository": "SuperrSonic/mplayer-ce-libogc2",

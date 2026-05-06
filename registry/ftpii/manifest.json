@@ -6,6 +6,10 @@
   "category": "utilities",
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "sd_gecko", "sd2sp2", "bba", "eth2gc"],
+  "license": {
+    "spdx": "Zlib",
+    "url": "https://github.com/leo60228/ftpii/blob/gamecube/LICENSE.txt"
+  },
   "source": {
     "type": "github_release",
     "repository": "leo60228/ftpii",

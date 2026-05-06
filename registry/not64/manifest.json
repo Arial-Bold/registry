@@ -13,9 +13,13 @@
     "memory_card",
     "sd_gecko",
     "sd2sp2",
-    "m2_loader",
+    "m2loader",
     "mmce"
   ],
+  "license": {
+    "spdx": "GPL-2.0-or-later",
+    "notes": "Source files carry GPL-2.0-or-later headers; repository has no top-level LICENSE file."
+  },
   "source": {
     "type": "github_release",
     "repository": "extremscorner/not64",

@@ -6,6 +6,10 @@
   "category": "games",
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "sd_gecko", "sd2sp2"],
+  "license": {
+    "spdx": "NOASSERTION",
+    "notes": "Repository ships no LICENSE file. Engine derived from a third-party reverse-engineering project (cyxdown.free.fr/nicky); original Nicky Boum game data is copyrighted by Microids and must be supplied by the user."
+  },
   "source": {
     "type": "github_release",
     "repository": "emukidid/Nicky-Boum",

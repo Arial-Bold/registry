@@ -6,6 +6,10 @@
   "category": "utilities",
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "sd_gecko", "sd2sp2", "gcloader"],
+  "license": {
+    "spdx": "GPL-3.0-only",
+    "url": "https://github.com/suloku/gcmm/blob/master/COPYING"
+  },
   "source": {
     "type": "github_release",
     "repository": "suloku/gcmm",

@@ -6,6 +6,10 @@
   "category": "utilities",
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "sd_gecko", "bba"],
+  "license": {
+    "spdx": "GPL-2.0-or-later",
+    "url": "https://github.com/emukidid/swiss-gc/blob/master/LICENSE"
+  },
   "source": {
     "type": "github_release",
     "repository": "emukidid/swiss-gc",

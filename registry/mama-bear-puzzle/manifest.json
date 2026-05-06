@@ -6,6 +6,10 @@
   "category": "games",
   "platforms": ["gamecube", "panasonic_q", "dolphin"],
   "peripherals": ["controller"],
+  "license": {
+    "spdx": "NOASSERTION",
+    "notes": "Distributed as freeware from the author's website without an explicit license declaration."
+  },
   "source": {
     "type": "direct_url",
     "url": "http://sebastianmihai.com/downloads/gcwii/mamabearpuzzle.dol"

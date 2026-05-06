@@ -6,6 +6,10 @@
   "category": "games",
   "platforms": ["gamecube", "panasonic_q", "dolphin"],
   "peripherals": ["controller"],
+  "license": {
+    "spdx": "NOASSERTION",
+    "notes": "Distributed via itch.io without an explicit license declaration."
+  },
   "source": {
     "type": "itchio",
     "creator": "solarscapegames",
