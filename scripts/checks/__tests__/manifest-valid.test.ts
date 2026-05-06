@@ -11,12 +11,13 @@ const validManifest: Manifest = {
     author: "tester",
     description_short: "A test application",
     category: "games",
+    license: { spdx: "MIT" },
     source: {
         type: "github_release",
         repository: "owner/repo",
         asset_pattern: "*.dol",
     },
-    treatments: [{ treatment: "decompress", arguments: ["zip"] }],
+    treatments: [{ treatment: "archive.extract", arguments: ["*.zip", "."] }],
 };
 
 describe("manifestValid", () => {
@@ -62,5 +63,157 @@ describe("manifestValid", () => {
 
         expect(result.passed).toBe(false);
         expect(result.message).toMatch(/arguments/);
+    });
+
+    it("fails when license is missing", () => {
+        const { license, ...withoutLicense } = validManifest;
+        const result = manifestValid(makeCtx(withoutLicense as Manifest));
+
+        expect(result.passed).toBe(false);
+        expect(result.message).toMatch(/license/);
+    });
+
+    it("fails when license.spdx is missing", () => {
+        const result = manifestValid(
+            makeCtx({ ...validManifest, license: {} as any }),
+        );
+
+        expect(result.passed).toBe(false);
+        expect(result.message).toMatch(/spdx/);
+    });
+
+    it("accepts NOASSERTION with notes for unclear licenses", () => {
+        const result = manifestValid(
+            makeCtx({
+                ...validManifest,
+                license: {
+                    spdx: "NOASSERTION",
+                    notes: "Author unknown, no LICENSE file found.",
+                },
+            }),
+        );
+
+        expect(result.passed).toBe(true);
+    });
+
+    it("accepts a relative license url", () => {
+        const result = manifestValid(
+            makeCtx({
+                ...validManifest,
+                license: { spdx: "MIT", url: "LICENSE.md" },
+            }),
+        );
+
+        expect(result.passed).toBe(true);
+    });
+
+    it("accepts compound SPDX expressions", () => {
+        const result = manifestValid(
+            makeCtx({
+                ...validManifest,
+                license: { spdx: "MIT OR Apache-2.0" },
+            }),
+        );
+
+        expect(result.passed).toBe(true);
+    });
+
+    it("accepts external_resources of type assets alongside source", () => {
+        const result = manifestValid(
+            makeCtx({
+                ...validManifest,
+                external_resources: [
+                    {
+                        type: "assets",
+                        label: "Original DOOM WAD",
+                        url: "https://example.com/doom",
+                        notes: "Place doom1.wad next to the .dol after install",
+                    },
+                ],
+            }),
+        );
+
+        expect(result.passed).toBe(true);
+    });
+
+    it("accepts external download in place of source", () => {
+        const { source, ...withoutSource } = validManifest;
+        const result = manifestValid(
+            makeCtx({
+                ...(withoutSource as Manifest),
+                external_resources: [
+                    {
+                        type: "download",
+                        label: "Download from author's site",
+                        url: "https://example.com/app.zip",
+                        notes: "License does not permit redistribution",
+                    },
+                ],
+            }),
+        );
+
+        expect(result.passed).toBe(true);
+    });
+
+    it("fails when neither source nor a download external_resource is present", () => {
+        const { source, ...withoutSource } = validManifest;
+        const result = manifestValid(makeCtx(withoutSource as Manifest));
+
+        expect(result.passed).toBe(false);
+        expect(result.message).toMatch(/source|external_resources/);
+    });
+
+    it("fails when source is omitted and external_resources only has assets", () => {
+        const { source, ...withoutSource } = validManifest;
+        const result = manifestValid(
+            makeCtx({
+                ...(withoutSource as Manifest),
+                external_resources: [
+                    {
+                        type: "assets",
+                        label: "Extra assets",
+                        url: "https://example.com/assets",
+                    },
+                ],
+            }),
+        );
+
+        expect(result.passed).toBe(false);
+    });
+
+    it("fails when external_resources entry has unknown type", () => {
+        const result = manifestValid(
+            makeCtx({
+                ...validManifest,
+                external_resources: [
+                    {
+                        type: "manual" as any,
+                        label: "Foo",
+                        url: "https://example.com/foo",
+                    },
+                ],
+            }),
+        );
+
+        expect(result.passed).toBe(false);
+        expect(result.message).toMatch(/type/);
+    });
+
+    it("fails when external_resources url is not absolute", () => {
+        const result = manifestValid(
+            makeCtx({
+                ...validManifest,
+                external_resources: [
+                    {
+                        type: "assets",
+                        label: "Local file",
+                        url: "not-a-url",
+                    },
+                ],
+            }),
+        );
+
+        expect(result.passed).toBe(false);
+        expect(result.message).toMatch(/url|uri/);
     });
 });

@@ -13,7 +13,30 @@
       "examples": [["v1.0-beta", "nightly*"]]
     }
   },
-  "required": ["name", "author", "description_short", "category", "source", "treatments"],
+  "required": ["name", "author", "description_short", "category", "license", "treatments"],
+  "anyOf": [
+    {
+      "title": "Hosted source",
+      "description": "Application is downloadable through the registry — `source` is required.",
+      "required": ["source"]
+    },
+    {
+      "title": "External-only application",
+      "description": "Application cannot be redistributed; `source` may be omitted as long as `external_resources` declares at least one entry of type `download`.",
+      "required": ["external_resources"],
+      "properties": {
+        "external_resources": {
+          "type": "array",
+          "minContains": 1,
+          "contains": {
+            "type": "object",
+            "properties": { "type": { "const": "download" } },
+            "required": ["type"]
+          }
+        }
+      }
+    }
+  ],
   "examples": [
     {
       "name": "CleanRip",
@@ -23,6 +46,10 @@
       "category": "utilities",
       "platforms": ["gamecube", "panasonic_q"],
       "peripherals": ["controller", "sd_gecko", "sd2sp2", "m2loader", "mmce"],
+      "license": {
+        "spdx": "GPL-2.0-only",
+        "url": "https://github.com/emukidid/cleanrip/blob/master/LICENSE"
+      },
       "source": {
         "type": "github_release",
         "repository": "emukidid/cleanrip",
@@ -104,6 +131,105 @@
       "examples": [
         ["controller", "sd_gecko", "bba"],
         ["controller", "sd_gecko", "sd2sp2", "m2loader", "mmce"]
+      ]
+    },
+    "license": {
+      "type": "object",
+      "description": "Licensing information for the application. Used by the catalog to display license badges and link to the full license text. If the license cannot be determined, set `spdx` to `NOASSERTION` and use `notes` to explain.",
+      "properties": {
+        "spdx": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9.+\\-()\\s]+$",
+          "description": "SPDX license identifier or expression (https://spdx.org/licenses/). Examples: `MIT`, `GPL-2.0-only`, `Apache-2.0`, or compound expressions like `MIT OR Apache-2.0` and `GPL-2.0-or-later WITH Classpath-exception-2.0`. Use the reserved value `NOASSERTION` when the license cannot be determined, or `NONE` when no license is granted.",
+          "examples": ["MIT", "GPL-2.0-only", "Apache-2.0", "MIT OR Apache-2.0", "NOASSERTION"]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri-reference",
+          "minLength": 1,
+          "description": "Link to the full license text. Absolute URLs (e.g. a `LICENSE` file in the upstream repository) are linked as-is. Relative paths (e.g. `LICENSE.md`) are resolved against the application's registry directory and can be used when the license file is shipped alongside `manifest.json`.",
+          "examples": [
+            "https://github.com/emukidid/swiss-gc/blob/master/LICENSE",
+            "LICENSE.md"
+          ]
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "Free-form notes about the license. Recommended when `spdx` is `NOASSERTION` to document why the license is unclear (e.g. unknown author, distributed without a license file)."
+        }
+      },
+      "required": ["spdx"],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "spdx": "GPL-2.0-only",
+          "url": "https://github.com/emukidid/cleanrip/blob/master/LICENSE"
+        },
+        {
+          "spdx": "NOASSERTION",
+          "notes": "Source archive found on a fan site with no LICENSE file; original author unknown."
+        },
+        {
+          "spdx": "MIT",
+          "url": "LICENSE.md"
+        }
+      ]
+    },
+    "external_resources": {
+      "type": "array",
+      "minItems": 1,
+      "description": "External links the user must follow manually. Two roles are supported: `download` for cases where redistribution of the application itself is not permitted (omit `source` in that case — the catalog will surface the link instead of an install button), and `assets` for cases where the registry-hosted package needs additional files (e.g. licensed game assets) that the user has to fetch on their own.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["download", "assets"],
+            "description": "Role of the link. `download` replaces the registry-hosted install (used when redistribution is prohibited). `assets` supplements an installed app with files the user must obtain themselves."
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Human-readable caption shown next to the link or under the QR code in the catalog UI.",
+            "examples": ["Download from author's site", "Original DOOM WAD"]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL the catalog links to and encodes into the QR code.",
+            "examples": ["https://example.com/download"]
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Optional explanation shown alongside the link — typically the reason the user must fetch it themselves (license restriction, required asset, etc.)."
+          }
+        },
+        "required": ["type", "label", "url"],
+        "additionalProperties": false
+      },
+      "examples": [
+        [
+          {
+            "type": "download",
+            "label": "Download from author's site",
+            "url": "https://example.com/app.zip",
+            "notes": "License does not permit redistribution"
+          }
+        ],
+        [
+          {
+            "type": "assets",
+            "label": "Original DOOM WAD",
+            "url": "https://www.doomworld.com/classicdoom/info/shareware.php",
+            "notes": "Required licensed asset; place doom1.wad next to the .dol after install"
+          }
+        ]
       ]
     },
     "source": {

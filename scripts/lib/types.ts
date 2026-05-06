@@ -5,6 +5,19 @@ export interface SourceConfig {
     };
 }
 
+export interface License {
+    spdx: string;
+    url?: string;
+    notes?: string;
+}
+
+export interface ExternalResource {
+    type: "download" | "assets";
+    label: string;
+    url: string;
+    notes?: string;
+}
+
 export interface Manifest {
     name: string;
     author: string;
@@ -13,9 +26,11 @@ export interface Manifest {
     category: string;
     platforms?: string[];
     peripherals?: string[];
-    source:
+    license: License;
+    source?:
         | { type: "github_release"; repository: string; asset_pattern: string }
         | { type: "direct_url"; url: string; file_name?: string };
+    external_resources?: ExternalResource[];
     treatments: {
         treatment: string;
         arguments: string[];
