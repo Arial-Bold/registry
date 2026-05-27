@@ -22,6 +22,7 @@ while IFS= read -r manifest; do
   PASSED=true
   OUTPUT=$(docker run --rm \
     -e GITHUB_TOKEN="${GITHUB_TOKEN:-}" \
+    -e ITCHIO_API_KEY="${ITCHIO_API_KEY:-}" \
     -v "${WORKSPACE}:/workspace:ro" \
     "$IMAGE" \
     test-manifest "/workspace/$manifest" 2>&1) || PASSED=false

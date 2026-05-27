@@ -62,6 +62,7 @@ jobs:
         id: test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ITCHIO_API_KEY: ${{ secrets.ITCHIO_API_KEY }}
         run: ./.github/scripts/test-manifests.sh "${{ steps.changed.outputs.manifests }}" "${{ github.workspace }}" "$GITHUB_OUTPUT"
 
       - name: Comment on PR
