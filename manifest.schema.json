@@ -392,6 +392,13 @@
               "minLength": 1,
               "description": "Expected file extension of the downloaded asset. Used to assemble the local filename `{game}.{format}`.",
               "examples": ["zip", "7z"]
+            },
+            "version_pattern": {
+              "type": "string",
+              "format": "regex",
+              "minLength": 1,
+              "description": "Optional regular expression used to extract the version from the matched upload's display name or filename. The first capture group (or the whole match when there is no group) becomes the version. Overrides the default heuristic, which takes the first dotted number (e.g. `1.20`); if neither produces a match, a `{date}-{md5}` identifier is used.",
+              "examples": ["(\\d+\\.\\d+)"]
             }
           },
           "required": ["type", "creator", "game", "upload", "format"],
