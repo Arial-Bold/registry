@@ -455,7 +455,7 @@
               },
               "arguments": {
                 "type": "array",
-                "minItems": 1,
+                "minItems": 2,
                 "maxItems": 2,
                 "prefixItems": [
                   {
@@ -467,8 +467,9 @@
                   },
                   {
                     "type": "string",
+                    "minLength": 1,
                     "title": "Destination",
-                    "description": "Directory to extract into, relative to the working directory. Defaults to the working directory itself.",
+                    "description": "Directory to extract into, relative to the working directory. Use \".\" for the working directory itself.",
                     "examples": [".", "extracted"]
                   }
                 ]
