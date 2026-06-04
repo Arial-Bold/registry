@@ -12,7 +12,8 @@
   },
   "source": {
     "type": "direct_url",
-    "url": "https://downloads.scummvm.org/frs/scummvm/2.7.1/scummvm-2.7.1-gamecube.zip"
+    "url": "https://downloads.scummvm.org/frs/scummvm/2.7.1/scummvm-2.7.1-gamecube.zip",
+    "version": "2.7.1"
   },
   "treatments": [
     {
