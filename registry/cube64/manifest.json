@@ -13,49 +13,33 @@
   "source": {
     "type": "github_release",
     "repository": "emukidid/Wii64",
-    "asset_pattern": "wii64-*.7z",
+    "asset_pattern": "cube64-*.7z",
     "ignore_versions": ["HiResTest", "texturepacker_1.2", "boxart.bin"]
   },
   "treatments": [
     {
       "treatment": "archive.extract",
-      "arguments": ["wii64-*.7z", "."]
+      "arguments": ["cube64-*.7z", "."]
     },
     {
       "treatment": "contents.move",
-      "arguments": ["gamecube/cube64-glN64-basic.dol", "apps/cube64/default.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["gamecube/cube64-glN64.dol", "apps/cube64/cube64-glN64.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["gamecube/cube64-glN64-exp.dol", "apps/cube64/cube64-glN64-exp.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["gamecube/cube64-Rice.dol", "apps/cube64/cube64-Rice.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["gamecube/cube64-Rice-basic.dol", "apps/cube64/cube64-Rice-basic.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["gamecube/cube64-Rice-exp.dol", "apps/cube64/cube64-Rice-exp.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["wii64/boxart.bin", "wii64/boxart.bin"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["wii64/RiceVideoLinux.ini", "wii64/RiceVideoLinux.ini"]
+      "arguments": ["*", "."]
     },
     {
       "treatment": "registry.copy",
-      "arguments": ["opening.bnr", "apps/cube64/opening.bnr"]
+      "arguments": ["opening-glN64.bnr", "apps/cube64-glN64/opening.bnr"]
+    },
+    {
+      "treatment": "registry.copy",
+      "arguments": ["opening-glN64-exp.bnr", "apps/cube64-glN64-exp/opening.bnr"]
+    },
+    {
+      "treatment": "registry.copy",
+      "arguments": ["opening-Rice.bnr", "apps/cube64-Rice/opening.bnr"]
+    },
+    {
+      "treatment": "registry.copy",
+      "arguments": ["opening-Rice-exp.bnr", "apps/cube64-Rice-exp/opening.bnr"]
     }
   ]
 }
