@@ -20,42 +20,6 @@
     {
       "treatment": "archive.extract",
       "arguments": ["cube64-*.7z", "."]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["wii64/*", "wii64/"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["apps/cube64-glN64/cube64-glN64.dol", "apps/cube64-glN64/default.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["apps/cube64-glN64-exp/cube64-glN64-exp.dol", "apps/cube64-glN64-exp/default.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["apps/cube64-Rice/cube64-Rice.dol", "apps/cube64-Rice/default.dol"]
-    },
-    {
-      "treatment": "contents.move",
-      "arguments": ["apps/cube64-Rice-exp/cube64-Rice-exp.dol", "apps/cube64-Rice-exp/default.dol"]
-    },
-    {
-      "treatment": "registry.copy",
-      "arguments": ["opening-glN64.bnr", "apps/cube64-glN64/opening.bnr"]
-    },
-    {
-      "treatment": "registry.copy",
-      "arguments": ["opening-glN64-exp.bnr", "apps/cube64-glN64-exp/opening.bnr"]
-    },
-    {
-      "treatment": "registry.copy",
-      "arguments": ["opening-Rice.bnr", "apps/cube64-Rice/opening.bnr"]
-    },
-    {
-      "treatment": "registry.copy",
-      "arguments": ["opening-Rice-exp.bnr", "apps/cube64-Rice-exp/opening.bnr"]
     }
   ]
 }
