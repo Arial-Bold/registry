@@ -1,11 +1,11 @@
 name: Application feedback
-description: Report a problem or share feedback about an application in Dolphin Depot.
+description: Report installation or launch problems, or share feedback about an application's Dolphin Depot listing.
 title: "[App feedback] "
 body:
     - type: markdown
       attributes:
           value: |
-              Share feedback about an application listed in Dolphin Depot. For problems, include what happened and what you expected instead.
+              Use this form for problems downloading, installing, or launching an application from Dolphin Depot, or for feedback about its listing. Report bugs within a running application to its developer.
     - type: input
       id: application
       attributes:
@@ -22,7 +22,7 @@ body:
       id: feedback
       attributes:
           label: Feedback
-          description: Describe the problem or suggestion. For a bug, include steps to reproduce it.
+          description: Describe the problem or suggestion related to the Dolphin Depot listing, download, installation, or launch. Report bugs within a running application to its developer.
       validations:
           required: true
     - type: textarea
