@@ -1,0 +1,32 @@
+name: Application feedback
+description: Report a problem or share feedback about an application in Dolphin Depot.
+title: "[App feedback] "
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Share feedback about an application listed in Dolphin Depot. For problems, include what happened and what you expected instead.
+    - type: input
+      id: application
+      attributes:
+          label: Application
+          description: Application name or registry slug.
+      validations:
+          required: true
+    - type: input
+      id: version
+      attributes:
+          label: Version
+          description: Which version did you use? If prefilled, check that it matches your version.
+    - type: textarea
+      id: feedback
+      attributes:
+          label: Feedback
+          description: Describe the problem or suggestion. For a bug, include steps to reproduce it.
+      validations:
+          required: true
+    - type: textarea
+      id: setup
+      attributes:
+          label: Hardware and setup
+          description: For problems running the application, include your console, loader, storage device, and any relevant peripherals.
