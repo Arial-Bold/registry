@@ -1,6 +1,7 @@
 name: Application feedback
 description: Report installation or launch problems, or share feedback about an application's Dolphin Depot listing.
-title: "[App feedback] "
+title: "[{slug}] Briefly describe the issue"
+labels: ["app feedback"]
 body:
     - type: markdown
       attributes:
