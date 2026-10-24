@@ -7,8 +7,8 @@
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "bba", "eth2gc", "sd2sp2", "sd_gecko"],
   "license": {
-    "spdx": "NOASSERTION",
-    "notes": "The upstream repository has no LICENSE file and the README does not state a license."
+    "spdx": "LicenseRef-Proprietary",
+    "url": "https://github.com/Arial-Bold/Cubebrowser/blob/main/LICENSE"
   },
   "source": {
     "type": "github_release",
