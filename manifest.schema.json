@@ -630,6 +630,39 @@
             ]
           },
           {
+            "title": "Create Directory",
+            "description": "Creates an empty directory in the output directory, including any missing parent directories (like `mkdir -p`). Use this when the app expects a directory (e.g. for saves or config) that is not shipped in the downloaded asset.",
+            "type": "object",
+            "properties": {
+              "treatment": {
+                "const": "contents.mkdir",
+                "description": "Discriminator identifying this step as a directory creation (like `mkdir -p`)."
+              },
+              "arguments": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "prefixItems": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Path",
+                    "description": "Directory path relative to the output directory. Parent directories are created automatically; an existing directory is left untouched.",
+                    "examples": ["apps/myapp/saves"]
+                  }
+                ]
+              }
+            },
+            "required": ["treatment", "arguments"],
+            "additionalProperties": false,
+            "examples": [
+              {
+                "treatment": "contents.mkdir",
+                "arguments": ["apps/myapp/saves"]
+              }
+            ]
+          },
+          {
             "title": "Download from URL",
             "description": "Downloads a file from a URL into the working directory. Use this to fetch additional assets not included in the main source download.",
             "type": "object",
