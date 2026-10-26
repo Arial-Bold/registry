@@ -5,7 +5,7 @@
   "description_long": "Evil Swampy has stolen the magic ruby and kidnapped Giana's sister Maria. Play as Giana in this free, unofficial sequel to The Great Giana Sisters: recover the ruby, save Maria, and find your way home across seven worlds of platforming action.",
   "category": "games",
   "platforms": ["gamecube", "panasonic_q"],
-  "peripherals": ["controller", "sd_gecko", "sd2sp2"],
+  "peripherals": ["controller", "sd_gecko"],
   "license": {
     "spdx": "NOASSERTION",
     "notes": "The official release is freeware but does not declare an SPDX-compatible license. The included README requires written permission for redistribution."
@@ -25,11 +25,11 @@
     },
     {
       "treatment": "contents.move",
-      "arguments": ["giana/config.txt", "apps/gianas-return/config.txt"]
+      "arguments": ["giana/config.txt", "giana/config.txt"]
     },
     {
       "treatment": "contents.move",
-      "arguments": ["giana/data/", "apps/gianas-return/data/"]
+      "arguments": ["giana/data/", "giana/data/"]
     },
     {
       "treatment": "registry.copy",
