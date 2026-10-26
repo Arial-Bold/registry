@@ -2,7 +2,7 @@
   "name": "StellaGC",
   "author": "nuvalo",
   "description_short": "Atari 2600 VCS emulator port for GameCube based on Stella.",
-  "description_long": "GameCube port of the cross-platform Stella emulator. Plays Atari 2600 VCS ROMs with the original Stella core, including the standard Stella launcher, state saves, and customizable button mapping. Reads ROMs and configuration from SD card.",
+  "description_long": "GameCube port of the cross-platform Stella emulator. Plays Atari 2600 VCS ROMs with the original Stella core, including the standard Stella launcher, state saves, and customizable button mapping. Reads ROMs and configuration from SD card. Supports SD cards up to 2 GB only.",
   "category": "emulators",
   "platforms": [
     "gamecube",
@@ -10,8 +10,7 @@
   ],
   "peripherals": [
     "controller",
-    "sd_gecko",
-    "sd2sp2"
+    "sd_gecko"
   ],
   "license": {
     "spdx": "GPL-2.0-or-later",
