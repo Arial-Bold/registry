@@ -5,7 +5,7 @@
   "description_long": "Toy Wars is a 3D action game inspired by Toy Commander for the Dreamcast. It features realistic physics via the ODE library, stencil shadows, custom level scripting, and 3D audio. Originally developed for the PSP, the game was designed to run on minimal hardware, requiring as little as 24MB of RAM. Winner of multiple homebrew competitions including Scenery Beta 2011.",
   "category": "games",
   "platforms": ["gamecube", "panasonic_q"],
-  "peripherals": ["controller", "sd_gecko", "sd2sp2"],
+  "peripherals": ["controller", "sd_gecko"],
   "license": {
     "spdx": "NOASSERTION",
     "notes": "Distributed as freeware from the author's website without an explicit license declaration."
@@ -25,7 +25,11 @@
     },
     {
       "treatment": "contents.move",
-      "arguments": ["toywars/", "apps/toy-wars/"]
+      "arguments": ["toywars/toywars.gc.data", "toywars/toywars.gc.data"]
+    },
+    {
+      "treatment": "contents.move",
+      "arguments": ["toywars/profiles/", "toywars/profiles/"]
     },
     {
       "treatment": "registry.copy",
