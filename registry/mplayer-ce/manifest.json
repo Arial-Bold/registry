@@ -22,7 +22,7 @@
     },
     {
       "treatment": "contents.move",
-      "arguments": ["mplayer-ce", "mplayer-ce"]
+      "arguments": ["mplayer-ce/", "apps/mplayer-ce/"]
     },
     {
       "treatment": "contents.move",
