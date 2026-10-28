@@ -31,6 +31,13 @@
         "blueretro_companion.dol",
         "apps/blueretro-companion/default.dol"
       ]
+    },
+    {
+      "treatment": "registry.copy",
+      "arguments": [
+        "opening.bnr",
+        "apps/blueretro-companion/opening.bnr"
+      ]
     }
   ]
 }

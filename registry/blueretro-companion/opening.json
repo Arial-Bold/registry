@@ -1,0 +1,10 @@
+{
+    "type": "BNR1",
+    "text": {
+        "gameNameShort": "Blueretro Companion",
+        "developerNameShort": "LaserBearIndustries",
+        "gameTitle": "Blueretro Companion",
+        "developerName": "LaserBearIndustries",
+        "description": "Utility for managing the LBI BlueRetro adapter"
+    }
+}
