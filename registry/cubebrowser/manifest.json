@@ -7,8 +7,8 @@
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "bba", "eth2gc", "sd2sp2", "sd_gecko"],
   "license": {
-    "spdx": "LicenseRef-Proprietary",
-    "url": "https://github.com/Arial-Bold/Cubebrowser/blob/main/LICENSE"
+    "spdx": "MIT",
+    "url": "https://github.com/Arial-Bold/Cubebrowser/blob/main/LICENSE.txt"
   },
   "source": {
     "type": "github_release",
