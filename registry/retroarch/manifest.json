@@ -2,7 +2,7 @@
   "name": "RetroArch",
   "author": "libretro",
   "description_short": "Frontend for emulators and game engines, bundling the libretro cores built for GameCube.",
-  "description_long": "RetroArch is a frontend for emulators, game engines and media players built on the libretro API. The GameCube port ships each core as a standalone DOL in /apps/retroarch: launch the one for the system you want to play. Cores cover NES, SNES, Game Boy, GBA, Mega Drive, Master System, PC Engine, PlayStation, arcade and more. Config, cheats, filters, saves and save states live under /retroarch on the SD card in SD Gecko slot A.",
+  "description_long": "RetroArch is a frontend for emulators, game engines and media players built on the libretro API. The GameCube port ships each core as a standalone DOL in /apps/retroarch: launch the one for the system you want to play. Cores cover NES, SNES, Game Boy, GBA, Mega Drive, Master System, PC Engine, PlayStation, arcade and more. Config, saves and save states live under /retroarch on the SD card in SD Gecko slot A.",
   "category": "emulators",
   "platforms": ["gamecube", "panasonic_q"],
   "peripherals": ["controller", "sd_gecko"],
@@ -27,7 +27,19 @@
     },
     {
       "treatment": "contents.move",
-      "arguments": ["retroarch/", "retroarch/"]
+      "arguments": ["retroarch/assets/", "apps/retroarch/assets/"]
+    },
+    {
+      "treatment": "contents.move",
+      "arguments": ["retroarch/filters/", "apps/retroarch/filters/"]
+    },
+    {
+      "treatment": "contents.move",
+      "arguments": ["retroarch/info/", "apps/retroarch/info/"]
+    },
+    {
+      "treatment": "contents.move",
+      "arguments": ["retroarch/overlays/", "apps/retroarch/overlays/"]
     },
     {
       "treatment": "registry.copy",
@@ -35,7 +47,11 @@
     },
     {
       "treatment": "contents.mkdir",
-      "arguments": ["retroarch/cheats"]
+      "arguments": ["apps/retroarch/cheats"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["apps/retroarch/autoconfig"]
     },
     {
       "treatment": "contents.mkdir",
