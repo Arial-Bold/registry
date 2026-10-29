@@ -32,6 +32,38 @@
     {
       "treatment": "registry.copy",
       "arguments": ["opening.bnr", "apps/retroarch/opening.bnr"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/cheats"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/remaps"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/config"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/playlists"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/logs"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/savefiles"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/savestates"]
+    },
+    {
+      "treatment": "contents.mkdir",
+      "arguments": ["retroarch/system"]
     }
   ]
 }
