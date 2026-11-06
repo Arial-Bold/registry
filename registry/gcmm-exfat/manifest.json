@@ -1,0 +1,45 @@
+{
+    "name": "GCMM exFAT",
+    "author": "Arial-Bold",
+    "description_short": "A gamecube memory card manager with exFAT compatibility and a modern UI",
+    "description_long": "Back up, restore and manage your GameCube memory card saves on an SD card, with FAT32 and exFAT support. Tick several saves at once and see which are new, changed or already backed up. Send files from your phone or computer to the SD card over your home network, with zips unzipped automatically, and download your backups. Includes whole-card backups, formatting, display settings, and updates from GitHub. Works with SD2SP2, SD Gecko and GC Loader.",
+    "category": "utilities",
+    "platforms": [
+        "gamecube",
+        "panasonic_q"
+    ],
+    "peripherals": [
+        "controller",
+        "memory_card",
+        "sd2sp2",
+        "sd_gecko",
+        "bba",
+        "eth2gc",
+        "picoboot"
+    ],
+    "license": {
+        "spdx": "GPL-3.0-or-later",
+        "url": "https://github.com/Arial-Bold/gcmm-exFAT?tab=License-1-ov-file"
+    },
+    "source": {
+        "type": "github_release",
+        "repository": "Arial-Bold/gcmm-exFAT",
+        "asset_pattern": "gcmm.v*.zip"
+    },
+    "treatments": [
+        {
+            "treatment": "archive.extract",
+            "arguments": [
+                "gcmm v*.zip",
+                "."
+            ]
+        },
+        {
+            "treatment": "contents.move",
+            "arguments": [
+                "default.dol",
+                "apps/gcmm/default.dol"
+            ]
+        }
+    ]
+}
