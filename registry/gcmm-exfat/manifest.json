@@ -19,7 +19,7 @@
     ],
     "license": {
         "spdx": "GPL-3.0-or-later",
-        "url": "https://github.com/Arial-Bold/gcmm-exFAT?tab=License-1-ov-file"
+        "url": "https://github.com/Arial-Bold/gcmm-exFAT/blob/master/COPYING"
     },
     "source": {
         "type": "github_release",
