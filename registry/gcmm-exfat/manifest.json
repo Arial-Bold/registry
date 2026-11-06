@@ -30,15 +30,15 @@
         {
             "treatment": "archive.extract",
             "arguments": [
-                "gcmm v*.zip",
+                "gcmm.v*.zip",
                 "."
             ]
         },
         {
             "treatment": "contents.move",
             "arguments": [
-                "default.dol",
-                "apps/gcmm/default.dol"
+                "gcmm/",
+                "apps/gcmm/"
             ]
         }
     ]
