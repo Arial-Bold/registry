@@ -15,7 +15,7 @@
         "sd_gecko",
         "bba",
         "eth2gc",
-        "picoboot"
+        "gcloader"
     ],
     "license": {
         "spdx": "GPL-3.0-or-later",
