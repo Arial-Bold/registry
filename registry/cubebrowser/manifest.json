@@ -24,13 +24,13 @@
     "source": {
         "type": "github_release",
         "repository": "Arial-Bold/Cubebrowser",
-        "asset_pattern": "cubebrowser v*.zip"
+        "asset_pattern": "cubebrowser*.zip"
     },
     "treatments": [
         {
             "treatment": "archive.extract",
             "arguments": [
-                "cubebrowser v*.zip",
+                "cubebrowser*.zip",
                 "."
             ]
         },
